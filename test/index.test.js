@@ -1,4 +1,4 @@
-import executeSELECTQuery from "../src/index";
+import executeSELECTQuery, { ERR_COLUMN_DNE } from "../src/index";
 
 test("Execute Select Query", async () => {
   const query = {
@@ -15,4 +15,12 @@ test("Execute Select Query", async () => {
     { name: "everyone", age: "28" },
   ];
   expect(result).toEqual(want);
+});
+
+test("Execute Select Query column dne", async () => {
+  const query = {
+    fields: ["name", "age", "wrong_col"],
+    table: "aargeee",
+  };
+  await expect(executeSELECTQuery(query)).rejects.toThrow(ERR_COLUMN_DNE);
 });

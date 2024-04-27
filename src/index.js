@@ -1,7 +1,15 @@
 import reader from "./CSVReader";
 
-export default executeSELECTQuery = async ({ fields, table }) => {
+export const ERR_COLUMN_DNE = new Error("Column does not exist");
+
+const executeSELECTQuery = async ({ fields, table }) => {
   const data = await reader(`./db/${table}.csv`);
+
+  if (data.length > 0) {
+    fields.forEach((field) => {
+      if (!(field in data[0])) throw ERR_COLUMN_DNE;
+    });
+  }
 
   const filteredData = data.map((row) => {
     const filteredRow = {};
@@ -12,3 +20,5 @@ export default executeSELECTQuery = async ({ fields, table }) => {
   });
   return filteredData;
 };
+
+export default executeSELECTQuery;
