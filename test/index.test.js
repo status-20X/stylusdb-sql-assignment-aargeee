@@ -1,3 +1,3 @@
 test("Hello Jest", () => {
-    expect("aargeee").toBe("aargeee");
-})
+  expect("aargeee").toBe("aargeee");
+});
