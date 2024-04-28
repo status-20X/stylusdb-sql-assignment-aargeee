@@ -1,4 +1,4 @@
-import parseQuery, { ERR_INVALID_FORMAT } from "../src/QueryParser";
+import parseQuery, { ERR_INVALID_FORMAT, OPERATOR } from "../src/QueryParser";
 
 describe("parses query", () => {
   const testcases = [
@@ -8,6 +8,7 @@ describe("parses query", () => {
       result: {
         fields: ["name"],
         table: "aargeee",
+        condition: [],
       },
     },
     {
@@ -16,6 +17,7 @@ describe("parses query", () => {
       result: {
         fields: ["name", "id"],
         table: "aargeee",
+        condition: [],
       },
     },
     {
@@ -24,6 +26,7 @@ describe("parses query", () => {
       result: {
         fields: ["*"],
         table: "aargeee",
+        condition: [],
       },
     },
     {
@@ -32,6 +35,25 @@ describe("parses query", () => {
       result: {
         fields: ["name"],
         table: "aargeee",
+        condition: [],
+      },
+    },
+    {
+      name: "where clause",
+      query: "SELECT name, age FROM aargeee WHERE age = 21",
+      result: {
+        fields: ["name", "age"],
+        table: "aargeee",
+        condition: ["age = 21"],
+      },
+    },
+    {
+      name: "where clause multiple condition",
+      query: "SELECT name, age FROM aargeee WHERE age = 21, id = 1",
+      result: {
+        fields: ["name", "age"],
+        table: "aargeee",
+        condition: ["age = 21", "id = 1"],
       },
     },
   ];
