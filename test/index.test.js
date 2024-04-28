@@ -24,3 +24,20 @@ test("Execute Select Query column dne", async () => {
   };
   await expect(executeSELECTQuery(query)).rejects.toThrow(ERR_COLUMN_DNE);
 });
+
+test("Execute Select Query", async () => {
+  const query = {
+    fields: ["*"],
+    table: "aargeee",
+  };
+  const result = await executeSELECTQuery(query);
+  expect(result[0]).toHaveProperty("name");
+  expect(result[0]).toHaveProperty("age");
+  expect(result[0]).toHaveProperty("id");
+  const want = [
+    { id: "1", name: "akku", age: "20" },
+    { id: "2", name: "aargeee", age: "21" },
+    { id: "3", name: "everyone", age: "28" },
+  ];
+  expect(result).toEqual(want);
+});
