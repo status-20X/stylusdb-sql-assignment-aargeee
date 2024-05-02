@@ -98,3 +98,25 @@ test("Execute SELECT with WHERE clause non existing column", async () => {
   };
   await expect(executeSELECTQuery(query)).rejects.toThrow(ERR_COLUMN_DNE);
 });
+
+test("Execute SELECT with multiple WHERE clause connected with AND", async () => {
+  const query = {
+    fields: ["name"],
+    table: "aargeee",
+    condition: [
+      {
+        field: "id",
+        operator: "=",
+        value: "1",
+      },
+      {
+        field: "age",
+        operator: "=",
+        value: "21",
+      },
+    ],
+  };
+
+  const result = await executeSELECTQuery(query);
+  expect(result.length).toBe(0);
+});
