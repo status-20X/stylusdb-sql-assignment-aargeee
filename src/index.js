@@ -2,7 +2,7 @@ import reader from "./CSVReader";
 
 export const ERR_COLUMN_DNE = new Error("Column does not exist");
 
-const executeSELECTQuery = async ({ fields, table, condition }) => {
+const executeSELECTQuery = async ({ fields, table, condition = [] }) => {
   const data = await reader(`./db/${table}.csv`);
 
   if (fields.length === 1 && fields[0] === "*") {
@@ -10,14 +10,15 @@ const executeSELECTQuery = async ({ fields, table, condition }) => {
     fields = Object.keys(data[0]);
   }
 
-  let filteredData = condition
-    ? data.filter((row) => {
-        let [field, value] = condition.split("=").map((s) => s.trim());
-        field = field.toLowerCase();
-        if (!(field in row)) throw ERR_COLUMN_DNE;
-        return row[field] === value;
-      })
-    : data;
+  let filteredData =
+    condition.length > 0
+      ? data.filter((row) =>
+          condition.every((con) => {
+            if (!(con.field in row)) throw ERR_COLUMN_DNE;
+            return row[con.field] === con.value;
+          }),
+        )
+      : data;
 
   if (data.length > 0) {
     fields.forEach((field) => {

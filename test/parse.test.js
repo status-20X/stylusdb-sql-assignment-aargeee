@@ -40,7 +40,53 @@ describe("parses query", () => {
       result: {
         fields: ["name", "age"],
         table: "aargeee",
-        condition: "age = 21",
+        condition: [
+          {
+            field: "age",
+            operator: "=",
+            value: "21",
+          },
+        ],
+      },
+    },
+    {
+      name: "multiple where clause",
+      query: "SELECT name, age FROM aargeee WHERE age = 21 AND id = 1",
+      result: {
+        fields: ["name", "age"],
+        table: "aargeee",
+        condition: [
+          {
+            field: "age",
+            operator: "=",
+            value: "21",
+          },
+          {
+            field: "id",
+            operator: "=",
+            value: "1",
+          },
+        ],
+      },
+    },
+    {
+      name: "multiple where clause with or",
+      query: "SELECT name, age FROM aargeee WHERE age = 21 or id = 1",
+      result: {
+        fields: ["name", "age"],
+        table: "aargeee",
+        condition: [
+          {
+            field: "age",
+            operator: "=",
+            value: "21",
+          },
+          {
+            field: "id",
+            operator: "=",
+            value: "1",
+          },
+        ],
       },
     },
     {
@@ -49,7 +95,13 @@ describe("parses query", () => {
       result: {
         fields: ["name", "age"],
         table: "aargeee",
-        condition: "age = 21 6",
+        condition: [
+          {
+            field: "age",
+            operator: "=",
+            value: "21",
+          },
+        ],
       },
     },
   ];

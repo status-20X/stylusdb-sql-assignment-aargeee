@@ -13,9 +13,17 @@ export default parseQuery = (query) => {
     return {
       fields: fields.split(",").map((field) => field.trim()),
       table: table.trim(),
-      condition: condition,
+      condition: condition ? parseWHEREClauses(condition) : undefined,
     };
   } else {
     throw ERR_INVALID_FORMAT;
   }
+};
+
+const parseWHEREClauses = (fullString) => {
+  const conditions = fullString.split(/ AND | OR /i);
+  return conditions.map((condition) => {
+    const [field, operator, value] = condition.split(/\s+/);
+    return { field, operator, value };
+  });
 };

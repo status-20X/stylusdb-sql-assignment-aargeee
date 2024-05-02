@@ -46,7 +46,13 @@ test("Execute SELECT with WHERE clause", async () => {
   const query = {
     fields: ["name"],
     table: "aargeee",
-    condition: "id = 1",
+    condition: [
+      {
+        field: "id",
+        operator: "=",
+        value: "1",
+      },
+    ],
   };
 
   const result = await executeSELECTQuery(query);
@@ -61,7 +67,13 @@ test("Execute SELECT with WHERE clause uppercase column", async () => {
   const query = {
     fields: ["name"],
     table: "aargeee",
-    condition: "ID = 1",
+    condition: [
+      {
+        field: "id",
+        operator: "=",
+        value: "1",
+      },
+    ],
   };
 
   const result = await executeSELECTQuery(query);
@@ -72,13 +84,17 @@ test("Execute SELECT with WHERE clause uppercase column", async () => {
   expect(result).toEqual([{ name: "akku" }]);
 });
 
-test("Execute SELECT with wrong WHERE clause", async () => {
+test("Execute SELECT with WHERE clause non existing column", async () => {
   const query = {
     fields: ["name"],
     table: "aargeee",
-    condition: "ID = 1 7",
+    condition: [
+      {
+        field: "idk",
+        operator: "=",
+        value: "1",
+      },
+    ],
   };
-
-  const result = await executeSELECTQuery(query);
-  expect(result.length).toBe(0);
+  await expect(executeSELECTQuery(query)).rejects.toThrow(ERR_COLUMN_DNE);
 });
