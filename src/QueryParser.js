@@ -13,9 +13,7 @@ export default parseQuery = (query) => {
     return {
       fields: fields.split(",").map((field) => field.trim()),
       table: table.trim(),
-      condition: condition
-        ? condition.split(",").map((cond) => cond.trim())
-        : [],
+      condition: condition,
     };
   } else {
     throw ERR_INVALID_FORMAT;

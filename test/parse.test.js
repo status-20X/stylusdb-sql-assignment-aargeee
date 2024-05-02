@@ -8,7 +8,6 @@ describe("parses query", () => {
       result: {
         fields: ["name"],
         table: "aargeee",
-        condition: [],
       },
     },
     {
@@ -17,7 +16,6 @@ describe("parses query", () => {
       result: {
         fields: ["name", "id"],
         table: "aargeee",
-        condition: [],
       },
     },
     {
@@ -26,7 +24,6 @@ describe("parses query", () => {
       result: {
         fields: ["*"],
         table: "aargeee",
-        condition: [],
       },
     },
     {
@@ -35,7 +32,6 @@ describe("parses query", () => {
       result: {
         fields: ["name"],
         table: "aargeee",
-        condition: [],
       },
     },
     {
@@ -44,16 +40,7 @@ describe("parses query", () => {
       result: {
         fields: ["name", "age"],
         table: "aargeee",
-        condition: ["age = 21"],
-      },
-    },
-    {
-      name: "where clause multiple condition",
-      query: "SELECT name, age FROM aargeee WHERE age = 21, id = 1",
-      result: {
-        fields: ["name", "age"],
-        table: "aargeee",
-        condition: ["age = 21", "id = 1"],
+        condition: "age = 21",
       },
     },
     {
@@ -62,7 +49,7 @@ describe("parses query", () => {
       result: {
         fields: ["name", "age"],
         table: "aargeee",
-        condition: ["age = 21 6"],
+        condition: "age = 21 6",
       },
     },
   ];

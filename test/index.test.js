@@ -46,7 +46,7 @@ test("Execute SELECT with WHERE clause", async () => {
   const query = {
     fields: ["name"],
     table: "aargeee",
-    condition: ["id = 1"],
+    condition: "id = 1",
   };
 
   const result = await executeSELECTQuery(query);
@@ -57,23 +57,11 @@ test("Execute SELECT with WHERE clause", async () => {
   expect(result).toEqual([{ name: "akku" }]);
 });
 
-test("Execute SELECT with multiple WHERE clause", async () => {
+test("Execute SELECT with WHERE clause uppercase column", async () => {
   const query = {
     fields: ["name"],
     table: "aargeee",
-    condition: ["id = 1", "age = 21"],
-  };
-
-  const result = await executeSELECTQuery(query);
-  expect(result.length).toBe(0);
-  expect(result).toEqual([]);
-});
-
-test("Execute SELECT with WHERE clause", async () => {
-  const query = {
-    fields: ["name"],
-    table: "aargeee",
-    condition: ["ID = 1"],
+    condition: "ID = 1",
   };
 
   const result = await executeSELECTQuery(query);
@@ -88,7 +76,7 @@ test("Execute SELECT with wrong WHERE clause", async () => {
   const query = {
     fields: ["name"],
     table: "aargeee",
-    condition: ["ID = 1 7"],
+    condition: "ID = 1 7",
   };
 
   const result = await executeSELECTQuery(query);
