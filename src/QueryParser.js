@@ -23,7 +23,9 @@ export default parseQuery = (query) => {
 const parseWHEREClauses = (fullString) => {
   const conditions = fullString.split(/ AND | OR /i);
   return conditions.map((condition) => {
-    const [field, operator, value] = condition.split(/\s+/);
-    return { field, operator, value };
+    const match = condition.match(/(.*?)(=|!=|>|<|>=|<=)(.*)/);
+    if (!match) throw ERR_INVALID_FORMAT;
+    const [, field, operator, value] = match;
+    return { field: field.trim(), operator, value: value.trim() };
   });
 };

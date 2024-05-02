@@ -1,6 +1,27 @@
 import reader from "./CSVReader";
 
 export const ERR_COLUMN_DNE = new Error("Column does not exist");
+export const ERR_OPERATOR_DNE = new Error("Operator does not exist");
+
+const evaluate = (row, con) => {
+  const { field, operator, value } = con;
+  switch (operator) {
+    case "=":
+      return row[field] === value;
+    case "!=":
+      return row[field] !== value;
+    case ">":
+      return row[field] > value;
+    case "<":
+      return row[field] < value;
+    case ">=":
+      return row[field] >= value;
+    case "<=":
+      return row[field] <= value;
+    default:
+      throw ERR_OPERATOR_DNE;
+  }
+};
 
 const executeSELECTQuery = async ({ fields, table, condition = [] }) => {
   const data = await reader(`./db/${table}.csv`);
@@ -15,7 +36,7 @@ const executeSELECTQuery = async ({ fields, table, condition = [] }) => {
       ? data.filter((row) =>
           condition.every((con) => {
             if (!(con.field in row)) throw ERR_COLUMN_DNE;
-            return row[con.field] === con.value;
+            return evaluate(row, con);
           }),
         )
       : data;

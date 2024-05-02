@@ -99,6 +99,26 @@ test("Execute SELECT with WHERE clause non existing column", async () => {
   await expect(executeSELECTQuery(query)).rejects.toThrow(ERR_COLUMN_DNE);
 });
 
+test("Execute SELECT with WHERE clause non existing column", async () => {
+  const query = {
+    fields: ["name"],
+    table: "aargeee",
+    condition: [
+      {
+        field: "id",
+        operator: ">",
+        value: "1",
+      },
+    ],
+  };
+  const result = await executeSELECTQuery(query);
+  expect(result.length).toBe(2);
+  expect(result[0]).toHaveProperty("name");
+  expect(result[0]).not.toHaveProperty("id");
+  expect(result[0]).not.toHaveProperty("age");
+  expect(result).toEqual([{ name: "aargeee" }, { name: "everyone" }]);
+});
+
 test("Execute SELECT with multiple WHERE clause connected with AND", async () => {
   const query = {
     fields: ["name"],

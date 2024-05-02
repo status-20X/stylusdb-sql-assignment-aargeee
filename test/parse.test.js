@@ -50,6 +50,21 @@ describe("parses query", () => {
       },
     },
     {
+      name: "where clause different comparator",
+      query: "SELECT name, age FROM aargeee WHERE age > 21",
+      result: {
+        fields: ["name", "age"],
+        table: "aargeee",
+        condition: [
+          {
+            field: "age",
+            operator: ">",
+            value: "21",
+          },
+        ],
+      },
+    },
+    {
       name: "multiple where clause",
       query: "SELECT name, age FROM aargeee WHERE age = 21 AND id = 1",
       result: {
@@ -99,7 +114,7 @@ describe("parses query", () => {
           {
             field: "age",
             operator: "=",
-            value: "21",
+            value: "21 6",
           },
         ],
       },
@@ -111,6 +126,12 @@ describe("parses query", () => {
       const parsed = parseQuery(testcase.query);
       expect(parsed).toEqual(testcase.result);
     });
+  });
+
+  it("throws error on invalid where clause", () => {
+    expect(() =>
+      parseQuery("SELECT name, age FROM aargeee WHERE age .. 21"),
+    ).toThrow(ERR_INVALID_FORMAT);
   });
 });
 
