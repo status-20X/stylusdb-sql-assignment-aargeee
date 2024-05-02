@@ -68,3 +68,29 @@ test("Execute SELECT with multiple WHERE clause", async () => {
   expect(result.length).toBe(0);
   expect(result).toEqual([]);
 });
+
+test("Execute SELECT with WHERE clause", async () => {
+  const query = {
+    fields: ["name"],
+    table: "aargeee",
+    condition: ["ID = 1"],
+  };
+
+  const result = await executeSELECTQuery(query);
+  expect(result.length).toBe(1);
+  expect(result[0]).toHaveProperty("name");
+  expect(result[0]).not.toHaveProperty("id");
+  expect(result[0]).not.toHaveProperty("age");
+  expect(result).toEqual([{ name: "akku" }]);
+});
+
+test("Execute SELECT with wrong WHERE clause", async () => {
+  const query = {
+    fields: ["name"],
+    table: "aargeee",
+    condition: ["ID = 1 7"],
+  };
+
+  const result = await executeSELECTQuery(query);
+  expect(result.length).toBe(0);
+});

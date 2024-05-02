@@ -56,6 +56,15 @@ describe("parses query", () => {
         condition: ["age = 21", "id = 1"],
       },
     },
+    {
+      name: "incorrect where clause",
+      query: "SELECT name, age FROM aargeee WHERE age = 21 6",
+      result: {
+        fields: ["name", "age"],
+        table: "aargeee",
+        condition: ["age = 21 6"],
+      },
+    },
   ];
 
   testcases.map((testcase) => {

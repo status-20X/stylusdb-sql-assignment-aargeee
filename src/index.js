@@ -11,11 +11,15 @@ const executeSELECTQuery = async ({ fields, table, condition = {} }) => {
   }
 
   let filteredData = data;
+  const conditionRegex = /(.+?) = (.+?)/gm;
   if (condition && condition.length > 0) {
     filteredData = data.filter((row) => {
       let accept = true; // Initialize accept as true for no conditions
       condition.forEach((whereCondition) => {
-        const [field, value] = whereCondition.split("=").map((s) => s.trim());
+        if (!whereCondition.match(conditionRegex)) return;
+        const [field, value] = whereCondition
+          .split("=")
+          .map((s) => s.trim().toLowerCase());
         if (!(field in row)) throw ERR_COLUMN_DNE;
         if (row[field] !== value) accept = false; // If any condition is not met, set accept to false
       });
