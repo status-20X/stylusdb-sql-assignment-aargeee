@@ -21,7 +21,7 @@ const parseWhereClauses = (whereClause) => {
         const match = conditionString.match(conditionRegex);
         if (match) {
             const [, field, operator, value] = match;
-            return { field: field.trim(), operator, value: value.trim() };
+            return { field: field.trim().toLowerCase(), operator, value: value.trim() };
         }
         throw new Error('Invalid WHERE clause format');
     });
