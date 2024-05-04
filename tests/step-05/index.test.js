@@ -18,7 +18,8 @@ test('Parse SQL Query', () => {
         table: 'sample',
         whereClauses: [],
         joinCondition: null,
-        joinTable: null
+        joinTable: null,
+        joinType: null
     });
 });
 
@@ -44,7 +45,8 @@ test('Parse SQL Query with WHERE Clause', () => {
             value: "25"
         }],
         joinCondition: null,
-        joinTable: null
+        joinTable: null,
+        joinType: null
     });
 });
 

@@ -18,7 +18,8 @@ test('Parse SQL Query', () => {
         table: 'sample',
         whereClauses: [],
         joinCondition: null,
-        joinTable: null
+        joinTable: null,
+        joinType: null
     });
 });
 
