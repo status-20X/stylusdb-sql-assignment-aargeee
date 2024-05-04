@@ -3,12 +3,33 @@ const parseQuery = require("./queryParser")
 
 const executeSELECTQuery = async (query) => {
 
-    const {fields, table, whereClauses} = parseQuery(query);
-    const data = await readCSV(`${table}.csv`);
+    const { fields, table, whereClauses, joinTable, joinCondition } = parseQuery(query);
+    let data = await readCSV(`${table}.csv`);
 
-    const filteredData = whereClauses.length > 0 
-    ? data.filter(row => whereClauses.every(clause => evaluateContiion(row, clause))) 
-    : data;
+    // Perform INNER JOIN if specified
+    if (joinTable && joinCondition) {
+        const joinData = await readCSV(`${joinTable}.csv`);
+        data = data.flatMap(mainRow => {
+            return joinData
+                .filter(joinRow => {
+                    const mainValue = mainRow[joinCondition.left.split('.')[1]];
+                    const joinValue = joinRow[joinCondition.right.split('.')[1]];
+                    return mainValue === joinValue;
+                })
+                .map(joinRow => {
+                    return fields.reduce((acc, field) => {
+                        const [tableName, fieldName] = field.split('.');
+                        acc[field] = tableName === table ? mainRow[fieldName] : joinRow[fieldName];
+                        return acc;
+                    }, {});
+                });
+        });
+    }
+
+    // Apply WHERE clause filtering after JOIN (or on the original data if no join)
+    const filteredData = whereClauses.length > 0
+        ? data.filter(row => whereClauses.every(clause => evaluateCondition(row, clause)))
+        : data;
 
     return filteredData.map(row => {
         const filteredRow = {};
@@ -20,7 +41,7 @@ const executeSELECTQuery = async (query) => {
     });
 }
 
-const evaluateContiion = (row, clause) => {
+const evaluateCondition = (row, clause) => {
     const {field, operator, value} = clause;
     if (!(field in row)) throw new Error("Field DNE");
     switch (operator) {
