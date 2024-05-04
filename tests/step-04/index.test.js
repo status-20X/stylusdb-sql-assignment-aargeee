@@ -16,7 +16,9 @@ test('Parse SQL Query', () => {
     expect(parsed).toEqual({
         fields: ['id', 'name'],
         table: 'sample',
-        whereClauses: []
+        whereClauses: [],
+        joinCondition: null,
+        joinTable: null
     });
 });
 
@@ -32,7 +34,7 @@ test('Execute SQL Query', async () => {
 
 test("Execute SQL Query on incorrect query throws Error", async () => {
     const query = 'INCORRECT QUskfj';
-    await expect(executeSELECTQuery(query)).rejects.toThrow(new Error("Invalid Query Format"))
+    await expect(executeSELECTQuery(query)).rejects.toThrow(new Error("Invalid SELECT format"))
 });
 
 test("Execute SQL Query on unknown fields", async () => {
