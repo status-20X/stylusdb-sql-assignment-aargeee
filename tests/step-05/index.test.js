@@ -48,3 +48,27 @@ test('Execute SQL Query with WHERE Clause', async () => {
     expect(result[0]).toHaveProperty('name');
     expect(result[0].id).toBe('2');
 });
+
+test('Execute SQL Query with WHERE Clause unknown field', async () => {
+    const query = 'SELECT id, name FROM sample WHERE something = 25';
+    await expect(executeSELECTQuery(query)).rejects.toThrow(new Error("Field DNE"));
+});
+
+test('Execute SQL Query with WHERE Clause all lowercase', async () => {
+    const query = 'select id, name from sample where age = 25';
+    const result = await executeSELECTQuery(query);
+    expect(result.length).toBe(1);
+    expect(result[0]).toHaveProperty('id');
+    expect(result[0]).toHaveProperty('name');
+    expect(result[0].id).toBe('2');
+});
+
+test('Execute SQL Query with WHERE Clause all uppercase', async () => {
+    const query = 'SELECT ID, NAME FROM SAMPLE WHERE AGE = 25';
+    const result = await executeSELECTQuery(query);
+    expect(result.length).toBe(1);
+    expect(result[0]).toHaveProperty('id');
+    expect(result[0]).toHaveProperty('name');
+    expect(result[0].id).toBe('2');
+});
+

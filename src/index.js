@@ -9,6 +9,7 @@ const executeSELECTQuery = async (query) => {
     const filteredData = whereClause ? 
         data.filter(row => {
             const [field, value] = whereClause.split("=").map(s => s.trim())
+            if (!(field in row)) throw new Error("Field DNE");
             return row[field] == value
         }) : data;
 
