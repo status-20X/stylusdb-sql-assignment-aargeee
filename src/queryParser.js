@@ -16,11 +16,15 @@ const parseQuery = (query) => {
 }
 
 const parseWhereClauses = (whereClause) => {
-    const conditions = whereClause.split(/ AND | OR /i);
-    return conditions.map(condition => {
-        const [field, operator, value] = condition.split(/\s+/);
-        return {field: field.trim().toLowerCase(), operator: operator.trim(), value: value.trim()};
-    })
+    const conditionRegex = /(.*?)(=|!=|>|<|>=|<=)(.*)/;
+    return whereClause.split(/ AND | OR /i).map(conditionString => {
+        const match = conditionString.match(conditionRegex);
+        if (match) {
+            const [, field, operator, value] = match;
+            return { field: field.trim(), operator, value: value.trim() };
+        }
+        throw new Error('Invalid WHERE clause format');
+    });
 } 
 
 module.exports = parseQuery;
