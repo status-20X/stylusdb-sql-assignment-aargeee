@@ -17,3 +17,8 @@ test('Parse SQL Query', () => {
         table: 'sample'
     });
 });
+
+test("Parsing incorrect query throws error", () => {
+    const query = 'I am incorrect';
+    expect(() => parseQuery(query)).toThrow(new Error("Invalid Query Format"))
+})
