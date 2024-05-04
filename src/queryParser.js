@@ -7,12 +7,20 @@ const parseQuery = (query) => {
         return {
             fields: columns.split(",").map(col => col.trim().toLowerCase()),
             table: table.trim().toLowerCase(),
-            whereClause: whereClause ? whereClause.trim().toLowerCase() : null
+            whereClauses: whereClause ? parseWhereClauses(whereClause.trim()) : []
         }
     } else {
         throw new Error("Invalid Query Format")
     }
 
 }
+
+const parseWhereClauses = (whereClause) => {
+    const conditions = whereClause.split(/ AND | OR /i);
+    return conditions.map(condition => {
+        const [field, operator, value] = condition.split(/\s+/);
+        return {field: field.trim().toLowerCase(), operator: operator.trim(), value: value.trim()};
+    })
+} 
 
 module.exports = parseQuery;
