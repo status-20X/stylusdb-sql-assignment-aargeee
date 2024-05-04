@@ -14,6 +14,15 @@ test('Parse SQL Query', () => {
     const parsed = parseQuery(query);
     expect(parsed).toEqual({
         fields: ['id', 'name'],
-        table: 'sample'
+        table: 'sample',
+        whereClauses: [],
+        joinCondition: null,
+        joinTable: null,
+        joinType: null
     });
 });
+
+test("Parsing incorrect query throws error", () => {
+    const query = 'I am incorrect';
+    expect(() => parseQuery(query)).toThrow(new Error("Invalid SELECT format"))
+})

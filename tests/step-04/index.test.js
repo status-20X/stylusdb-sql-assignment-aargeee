@@ -15,7 +15,11 @@ test('Parse SQL Query', () => {
     const parsed = parseQuery(query);
     expect(parsed).toEqual({
         fields: ['id', 'name'],
-        table: 'sample'
+        table: 'sample',
+        whereClauses: [],
+        joinCondition: null,
+        joinTable: null,
+        joinType: null
     });
 });
 
@@ -27,4 +31,14 @@ test('Execute SQL Query', async () => {
     expect(result[0]).toHaveProperty('name');
     expect(result[0]).not.toHaveProperty('age');
     expect(result[0]).toEqual({ id: '1', name: 'John' });
+});
+
+test("Execute SQL Query on incorrect query throws Error", async () => {
+    const query = 'INCORRECT QUskfj';
+    await expect(executeSELECTQuery(query)).rejects.toThrow(new Error("Invalid SELECT format"))
+});
+
+test("Execute SQL Query on unknown fields", async () => {
+    const query = "SELECT wrong from sample";
+    await expect(executeSELECTQuery(query)).rejects.toThrow(new Error("Field DNE"));
 });
